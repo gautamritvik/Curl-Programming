@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "curl-programming-language"
+version = "1.0.0"
+description = "Curl programming language interpreter"
+requires-python = ">=3.7"
+
+[project.scripts]
+curlang = "main:main"
+
+[tool.setuptools]
+py-modules = ["main", "lexer", "parser", "interpreter", "errors"]
