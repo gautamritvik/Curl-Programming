@@ -1,0 +1,2 @@
+var{name, "Ritvik"}\
+pcType{"Hello " + var{name} + "!"}\

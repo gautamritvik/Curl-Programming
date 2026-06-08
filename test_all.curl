@@ -1,0 +1,31 @@
+var{name, "Ritvik"}\
+pcType{"=== Variables ==="}\
+pcType{"Hello, " + var{name} + "!"}\
+
+pcType{"=== Lists ==="}\
+var{colors, list{"red"; "green"; "blue"}}\
+pcType{"First color: " + var{colors}}\
+
+pcType{"=== Functions ==="}\
+createFunc{greet}-
+    pcType{"Hello from the greet function!"}\
+--\
+func{greet}\
+
+pcType{"=== Conditionals ==="}\
+var{score, 90}\
+if{var{score} >= 90, then}-
+    pcType{"Grade: A"}\
+elif{var{score} >= 80, then}-
+    pcType{"Grade: B"}\
+else:
+    pcType{"Grade: C or below"}\
+--\
+
+pcType{"=== Python block ==="}\
+otherCoding{"Python",
+
+x = 2 + 2
+print("Python says 2 + 2 =", x)
+
+}\
