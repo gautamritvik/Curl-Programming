@@ -7,10 +7,18 @@ Curl is an open-source programming language built on Python technology, designed
 - Python 3.7+
 - Node.js *(optional — only needed for `otherCoding{"JavaScript", ...}` blocks)*
 
+## Installation
+
+```
+pip install -e .
+```
+
+This registers the `curlang` command globally.
+
 ## Running a Curl program
 
 ```
-python main.py [YOUR-FILE].curl
+curlang [YOUR-FILE].curl
 ```
 
 ---
