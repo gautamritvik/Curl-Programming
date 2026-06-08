@@ -10,7 +10,7 @@ Curl is an open-source programming language built on Python technology, designed
 ## Running a Curl program
 
 ```
-python main.py yourfile.curl
+python main.py [YOUR-FILE].curl
 ```
 
 ---
