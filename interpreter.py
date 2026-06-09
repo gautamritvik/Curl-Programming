@@ -55,7 +55,7 @@ def _exec_stmt(stmt, env):
         _exec_other(stmt["language"], stmt["code"], env)
 
     elif t == "import":
-        if stmt["package"] in ("ai", "pcAI"):
+        if stmt["package"] in ("ai", "pcAI", "AI"):
             env["imports"][stmt["nickname"]] = CurlAIModule()
         else:
             try:
