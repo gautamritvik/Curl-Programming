@@ -1,5 +1,6 @@
 import sys
 import platform
+import argparse
 from importlib.metadata import version as _pkg_version, PackageNotFoundError
 from lexer import curl_tokenize
 from interpreter import execute
@@ -10,12 +11,90 @@ try:
 except PackageNotFoundError:
     __version__ = "dev"
 
+_COPYRIGHT = f"Copyright (c) 2024-2026 Ritvik Gautam. All rights reserved."
+
+_LICENSE = """\
+Curl is distributed under the Apache License, Version 2.0.
+
+You may obtain a copy of the License at:
+    https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+
+Full license: https://github.com/gautamritvik/Curl-Programming/blob/main/LICENSE"""
+
+_CREDITS = """\
+Curl Programming Language
+  Created by Ritvik Gautam
+  Built on Python technology
+  Source: https://github.com/gautamritvik/Curl-Programming
+  PyPI:   https://pypi.org/project/curl-programming-lang/"""
+
 
 def main():
-    if len(sys.argv) < 2:
-        repl()
+    parser = argparse.ArgumentParser(
+        prog="curlang",
+        description="Curl programming language interpreter",
+        add_help=False,
+    )
+    parser.add_argument("file", nargs="?", help="Curl source file to run (.curl)")
+    parser.add_argument("-c", metavar="cmd", help="Run a single Curl statement")
+    parser.add_argument("-V", "--version", action="store_true", help="Show version and exit")
+    parser.add_argument("-h", "--help", action="store_true", help="Show this help message and exit")
+    parser.add_argument("--license", action="store_true", help="Show license information and exit")
+    parser.add_argument("--copyright", action="store_true", help="Show copyright notice and exit")
+    parser.add_argument("--credits", action="store_true", help="Show credits and exit")
+
+    args = parser.parse_args()
+
+    if args.version:
+        print(f"Curl {__version__}")
+        return
+
+    if args.help:
+        print(f"Curl {__version__} — command-line options\n")
+        parser.print_help()
+        return
+
+    if args.license:
+        print(_LICENSE)
+        return
+
+    if args.copyright:
+        print(_COPYRIGHT)
+        return
+
+    if args.credits:
+        print(_CREDITS)
+        return
+
+    if args.c:
+        _run_code(args.c)
+    elif args.file:
+        run_file(args.file)
     else:
-        run_file(sys.argv[1])
+        repl()
+
+
+def _run_code(code):
+    try:
+        tokens = curl_tokenize(code)
+        ast = Parser(tokens).parse()
+        execute(ast)
+    except SyntaxError as e:
+        print(f"Syntax Error: {e}")
+        sys.exit(1)
+    except NameError as e:
+        print(f"Name Error: {e}")
+        sys.exit(1)
+    except RuntimeError as e:
+        print(f"Runtime Error: {e}")
+        sys.exit(1)
+    except Exception as e:
+        print(f"Error: {e}")
+        sys.exit(1)
 
 
 def run_file(file_path):
@@ -51,15 +130,13 @@ def run_file(file_path):
 
 
 def repl():
-    # Enables arrow keys (left/right cursor movement) and
-    # up/down history navigation in the REPL prompt.
     try:
         import readline
     except ImportError:
         pass  # Windows — basic input still works, just no arrow keys
 
     print(f"Curl {__version__} ({platform.system()}) on {sys.platform}")
-    print('Type "help" for more information, "exit" to quit.')
+    print('Type "help", "copyright", "credits", "license", or "exit" for more information.')
 
     env = {
         "variables": {},
@@ -69,8 +146,8 @@ def repl():
     }
 
     buffer = []
-    depth = 0            # how many - blocks deep we are
-    in_other_coding = False  # inside an otherCoding{} raw block
+    depth = 0
+    in_other_coding = False
 
     while True:
         try:
@@ -89,7 +166,6 @@ def repl():
         stripped = line.strip()
 
         # ── otherCoding raw-code mode ──────────────────────────────────────
-        # Collect lines verbatim until the closing }\ on its own line
         if in_other_coding:
             buffer.append(line)
             if stripped == "}\\":
@@ -98,7 +174,7 @@ def repl():
                 buffer = []
             continue
 
-        # ── top-level REPL commands (only when outside all blocks) ─────────
+        # ── top-level REPL commands ────────────────────────────────────────
         if depth == 0:
             if stripped in ("exit", "quit", "exit()", "quit()"):
                 print("Goodbye!")
@@ -106,12 +182,24 @@ def repl():
             if stripped == "help":
                 _repl_help()
                 continue
+            if stripped == "license":
+                print(_LICENSE)
+                continue
+            if stripped == "copyright":
+                print(_COPYRIGHT)
+                continue
+            if stripped == "credits":
+                print(_CREDITS)
+                continue
+            if stripped in ("version", "__version__"):
+                print(f"Curl {__version__}")
+                continue
             if stripped == "":
                 continue
 
         buffer.append(line)
 
-        # ── otherCoding opener (no \ at end, special block syntax) ─────────
+        # ── otherCoding opener ─────────────────────────────────────────────
         if depth == 0 and stripped.startswith("otherCoding"):
             in_other_coding = True
             continue
@@ -121,7 +209,7 @@ def repl():
             depth += 1
             continue
 
-        # ── block closer(s): count --\ on this line ────────────────────────
+        # ── block closer(s) ────────────────────────────────────────────────
         closes = stripped.count("--\\")
         if closes:
             depth = max(0, depth - closes)
@@ -132,9 +220,9 @@ def repl():
             buffer = []
             continue
 
-        # ── bad input at depth 0: line didn't end correctly ────────────────
+        # ── bad input at depth 0 ───────────────────────────────────────────
         if depth == 0:
-            print(f"  Syntax Error: statement must end with \\")
+            print("  Syntax Error: statement must end with \\")
             buffer = []
 
 
@@ -154,25 +242,33 @@ def _repl_exec(code, env):
 
 
 def _repl_help():
-    print("""
-Curl — Quick Reference
-─────────────────────────────
-  pcType{"text"}\\              Print to console
-  pcAsk{"prompt?">>}\\          Ask for input (access with input{ans})
-  var{name, "value"}\\          Create a variable
-  var{name}                    Reference a variable
-  list{"a"; "b"; "c"}         Create a list
-  createFunc{name}-            Define a function
+    print(f"""
+Curl {__version__} — Quick Reference
+─────────────────────────────────────
+Language syntax:
+  pcType{{"text"}}\\              Print to console
+  pcAsk{{"prompt?">>}}\\          Ask for input  →  input{{ans}}
+  var{{name, "value"}}\\          Assign a variable
+  var{{name}}                    Reference a variable
+  list{{"a"; "b"; "c"}}         Create a list
+  createFunc{{name}}-            Define a function
       ...
-  --\\                          End a block
-  func{name}\\                  Call a function
-  if{var{x} == "y", then}-    Conditional
-  import{"math", m}\\           Import a Python package
-  otherCoding{"Python",        Embed code in another language
+  --\\                           End a block
+  func{{name}}\\                  Call a function
+  if{{var{{x}} == "y", then}}-   Conditional (elif / else supported)
+  import{{"math", m}}\\           Import a Python package
+  otherCoding{{"Python",         Embed code in another language
       ...
-  }\\
-  exit                         Quit the REPL
-─────────────────────────────""")
+  }}\\
+
+REPL commands:
+  help          Show this message
+  license       Show license information
+  copyright     Show copyright notice
+  credits       Show credits
+  version       Show version
+  exit / quit   Leave the REPL
+─────────────────────────────────────""")
 
 
 if __name__ == "__main__":
