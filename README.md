@@ -1,6 +1,32 @@
 # Curl Programming Language
 
+[![PyPI version](https://img.shields.io/pypi/v/curl-programming-lang.svg)](https://pypi.org/project/curl-programming-lang/)
+[![License](https://img.shields.io/github/license/gautamritvik/Curl-Programming.svg)](https://github.com/gautamritvik/Curl-Programming/blob/main/LICENSE)
+[![Python](https://img.shields.io/pypi/pyversions/curl-programming-lang.svg)](https://pypi.org/project/curl-programming-lang/)
+
 Curl is an open-source programming language built on Python technology, designed to be simple and expressive. Every statement uses a `keyword{...}\` style, and blocks are opened with `-` and closed with `--\`.
+
+---
+
+## Why Curl?
+
+Most programming languages treat AI as an afterthought — a third-party library you install, a client you configure, boilerplate you copy from a docs page. By the time you write `response.choices[0].message.content`, you've already forgotten what you were building.
+
+Curl does it differently. `pcAI` is part of the language itself, the same way `print` is part of Python. There is no setup, no import, no client object. From the very first line of your program, you can ask a question and get an answer:
+
+```
+pcAI.ask{"What should I name this variable?"}\
+```
+
+That's the entire program. Not a demo — that actually runs.
+
+This is what makes Curl different from every other language: **AI is native syntax, not a library.** You don't bolt it on at the end. You design around it from the start. Want a bot that remembers what you said three messages ago? It already does. Want to give it a personality? One line. Want to drop into a full interactive chat from inside a script? One line. Want to run it against your own local model with no API key at all? Point one environment variable at Ollama and you're done.
+
+Curl is for people who want to build AI-powered programs without wading through infrastructure. For students writing their first script. For developers who want to prototype an idea in ten minutes instead of an afternoon. For anyone who's ever thought *I just want to ask the computer a question* and had to install four packages first.
+
+Other languages got AI added to them. Curl was designed with it at the center.
+
+---
 
 ## Requirements
 
