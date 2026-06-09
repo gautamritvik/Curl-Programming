@@ -1,4 +1,5 @@
 import importlib
+from ai_module import CurlAIModule
 
 
 def execute(ast, env=None):
@@ -54,11 +55,17 @@ def _exec_stmt(stmt, env):
         _exec_other(stmt["language"], stmt["code"], env)
 
     elif t == "import":
-        try:
-            mod = importlib.import_module(stmt["package"])
-            env["imports"][stmt["nickname"]] = mod
-        except ImportError as e:
-            raise ImportError(f"Could not import '{stmt['package']}': {e}")
+        if stmt["package"] == "ai":
+            env["imports"][stmt["nickname"]] = CurlAIModule()
+        else:
+            try:
+                mod = importlib.import_module(stmt["package"])
+                env["imports"][stmt["nickname"]] = mod
+            except ImportError as e:
+                raise ImportError(f"Could not import '{stmt['package']}': {e}")
+
+    elif t == "method_call":
+        _eval(stmt, env)  # execute and discard return value
 
     elif t == "ai":
         print(f"[pcAI — mode: {stmt['mode']} | {stmt['directions']}]")
@@ -123,6 +130,17 @@ def _eval(expr, env):
     if t == "func_call_expr":
         _call_func(expr["name"], env)
         return None
+
+    if t == "method_call":
+        module_name = expr["module"]
+        method_name = expr["method"]
+        arg = _eval(expr["arg"], env)
+        if module_name not in env["imports"]:
+            raise NameError(f"'{module_name}' is not imported — use import{{\"ai\", {module_name}}}\\")
+        module = env["imports"][module_name]
+        if not hasattr(module, method_name):
+            raise AttributeError(f"'{module_name}' has no method '{method_name}'")
+        return getattr(module, method_name)(arg)
 
     raise RuntimeError(f"Unknown expression type: {t!r}")
 

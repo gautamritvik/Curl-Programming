@@ -2,7 +2,7 @@ from lexer import (
     KEYWORD, STRING, NUMBER, IDENTIFIER,
     PLUS, MINUS, TIMES, DIVIDE,
     EQ, NEQ, LT, GT, LTE, GTE,
-    LBRACE, RBRACE, SEMICOLON, COMMA, COLON, ARROW,
+    LBRACE, RBRACE, SEMICOLON, COMMA, COLON, ARROW, DOT,
     LINE_END, BLOCK_END, RAW_CODE
 )
 
@@ -17,6 +17,12 @@ class Parser:
     def current(self):
         if self.pos < len(self.tokens):
             return self.tokens[self.pos]
+        return None
+
+    def peek(self, offset=1):
+        idx = self.pos + offset
+        if idx < len(self.tokens):
+            return self.tokens[idx]
         return None
 
     def consume(self, token_type, value=None):
@@ -72,6 +78,10 @@ class Parser:
         if token is None:
             return None
 
+        # module.method{arg}\  — e.g. ai.ask{"prompt"}\
+        if token[0] == IDENTIFIER and self.peek() and self.peek()[0] == DOT:
+            return self.parse_method_call_stmt()
+
         if token[0] != KEYWORD:
             raise SyntaxError(f"Expected a Curl keyword, got {token[0]} {repr(token[1])}")
 
@@ -118,7 +128,7 @@ class Parser:
         if self.check(COMMA):
             # var{name, value}\  →  assignment
             self.consume(COMMA)
-            value = self.parse_expr()
+            value = self.parse_concat_expr()
             self.consume(RBRACE)
             self.consume(LINE_END)
             return {"type": "assign", "name": name, "value": value}
@@ -196,6 +206,16 @@ class Parser:
         code = self.consume(RAW_CODE)[1]
         self.consume(LINE_END)
         return {"type": "other_code", "language": lang, "code": code}
+
+    def parse_method_call_stmt(self):
+        module = self.consume(IDENTIFIER)[1]
+        self.consume(DOT)
+        method = self.consume(IDENTIFIER)[1]
+        self.consume(LBRACE)
+        arg = self.parse_concat_expr()
+        self.consume(RBRACE)
+        self.consume(LINE_END)
+        return {"type": "method_call", "module": module, "method": method, "arg": arg}
 
     def parse_import(self):
         self.consume(KEYWORD, "import")
@@ -285,6 +305,19 @@ class Parser:
                 name = self.consume(IDENTIFIER)[1]
                 self.consume(RBRACE)
                 return {"type": "func_call_expr", "name": name}
+
+        # module.method{arg}  — e.g. ai.ask{"prompt"}
+        if token[0] == IDENTIFIER:
+            module = token[1]
+            self.pos += 1
+            if self.check(DOT):
+                self.consume(DOT)
+                method = self.consume(IDENTIFIER)[1]
+                self.consume(LBRACE)
+                arg = self.parse_concat_expr()
+                self.consume(RBRACE)
+                return {"type": "method_call", "module": module, "method": method, "arg": arg}
+            return {"type": "var_ref", "name": module}
 
         raise SyntaxError(f"Unexpected token in expression: {token[0]} {repr(token[1])}")
 

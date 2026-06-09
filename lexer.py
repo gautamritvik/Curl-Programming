@@ -15,6 +15,7 @@ GT = "GT"
 LTE = "LTE"
 GTE = "GTE"
 ASSIGN = "ASSIGN"
+DOT = "DOT"
 LBRACE = "LBRACE"
 RBRACE = "RBRACE"
 SEMICOLON = "SEMICOLON"
@@ -45,6 +46,7 @@ TOKEN_PATTERNS = [
     (TIMES,       r'\*'),
     (DIVIDE,      r'/'),
     (ASSIGN,      r'='),
+    (DOT,         r'\.'),
     (LBRACE,      r'\{'),
     (RBRACE,      r'\}'),
     (SEMICOLON,   r';'),
