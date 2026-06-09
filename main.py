@@ -45,6 +45,13 @@ def run_file(file_path):
 
 
 def repl():
+    # Enables arrow keys (left/right cursor movement) and
+    # up/down history navigation in the REPL prompt.
+    try:
+        import readline
+    except ImportError:
+        pass  # Windows — basic input still works, just no arrow keys
+
     print(f"Curl 1.0.0 ({platform.system()}) on {sys.platform}")
     print('Type "help" for more information, "exit" to quit.')
 
@@ -56,11 +63,12 @@ def repl():
     }
 
     buffer = []
-    depth = 0  # tracks how many blocks deep we are
+    depth = 0            # how many - blocks deep we are
+    in_other_coding = False  # inside an otherCoding{} raw block
 
     while True:
         try:
-            prompt = "... " if depth > 0 else ">>> "
+            prompt = "... " if (depth > 0 or in_other_coding) else ">>> "
             line = input(prompt)
         except EOFError:
             print()
@@ -69,11 +77,22 @@ def repl():
             print("\nKeyboardInterrupt")
             buffer = []
             depth = 0
+            in_other_coding = False
             continue
 
         stripped = line.strip()
 
-        # Top-level commands
+        # ── otherCoding raw-code mode ──────────────────────────────────────
+        # Collect lines verbatim until the closing }\ on its own line
+        if in_other_coding:
+            buffer.append(line)
+            if stripped == "}\\":
+                in_other_coding = False
+                _repl_exec("\n".join(buffer), env)
+                buffer = []
+            continue
+
+        # ── top-level REPL commands (only when outside all blocks) ─────────
         if depth == 0:
             if stripped in ("exit", "quit", "exit()", "quit()"):
                 print("Goodbye!")
@@ -86,20 +105,31 @@ def repl():
 
         buffer.append(line)
 
-        # A line ending with - (but not --\) opens a new block
+        # ── otherCoding opener (no \ at end, special block syntax) ─────────
+        if depth == 0 and stripped.startswith("otherCoding"):
+            in_other_coding = True
+            continue
+
+        # ── block opener: ends with - but not --\ ──────────────────────────
         if stripped.endswith("-") and not stripped.endswith("--\\"):
             depth += 1
+            continue
 
-        # Count how many --\ block-closers are on this line
+        # ── block closer(s): count --\ on this line ────────────────────────
         closes = stripped.count("--\\")
         if closes:
             depth = max(0, depth - closes)
 
-        # Execute when depth returns to 0 and line ends with \ (includes --\)
+        # ── execute when back at depth 0 and line ends with \ ──────────────
         if depth == 0 and stripped.endswith("\\"):
-            code = "\n".join(buffer)
+            _repl_exec("\n".join(buffer), env)
             buffer = []
-            _repl_exec(code, env)
+            continue
+
+        # ── bad input at depth 0: line didn't end correctly ────────────────
+        if depth == 0:
+            print(f"  Syntax Error: statement must end with \\")
+            buffer = []
 
 
 def _repl_exec(code, env):
@@ -108,31 +138,31 @@ def _repl_exec(code, env):
         ast = Parser(tokens).parse()
         execute(ast, env)
     except SyntaxError as e:
-        print(f"Syntax Error: {e}")
+        print(f"  Syntax Error: {e}")
     except NameError as e:
-        print(f"Name Error: {e}")
+        print(f"  Name Error: {e}")
     except RuntimeError as e:
-        print(f"Runtime Error: {e}")
+        print(f"  Runtime Error: {e}")
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"  Error: {e}")
 
 
 def _repl_help():
     print("""
 Curl 1.0.0 — Quick Reference
 ─────────────────────────────
-  pcType{"text"}\              Print to console
-  pcAsk{"prompt?">>}\          Ask for input (access with input{ans})
-  var{name, "value"}\          Create a variable
-  var{name}\                   Reference a variable
+  pcType{"text"}\\              Print to console
+  pcAsk{"prompt?">>}\\          Ask for input (access with input{ans})
+  var{name, "value"}\\          Create a variable
+  var{name}                    Reference a variable
   list{"a"; "b"; "c"}         Create a list
   createFunc{name}-            Define a function
       ...
   --\\                          End a block
-  func{name}\                  Call a function
+  func{name}\\                  Call a function
   if{var{x} == "y", then}-    Conditional
-  import{"math", m}\           Import a Python package
-  otherCoding{"Python",        Run code in another language
+  import{"math", m}\\           Import a Python package
+  otherCoding{"Python",        Embed code in another language
       ...
   }\\
   exit                         Quit the REPL
