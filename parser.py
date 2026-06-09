@@ -235,8 +235,11 @@ class Parser:
         self.consume(KEYWORD, "import")
         self.consume(LBRACE)
         package = self.consume(STRING)[1].strip('"')
-        self.consume(COMMA)
-        nickname = self.consume(IDENTIFIER)[1]
+        if self.check(COMMA):
+            self.consume(COMMA)
+            nickname = self.consume(IDENTIFIER)[1]
+        else:
+            nickname = None  # will default to "pcAI" for AI package, or package name otherwise
         self.consume(RBRACE)
         self.consume(LINE_END)
         return {"type": "import", "package": package, "nickname": nickname}

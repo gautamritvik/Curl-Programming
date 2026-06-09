@@ -55,12 +55,15 @@ def _exec_stmt(stmt, env):
         _exec_other(stmt["language"], stmt["code"], env)
 
     elif t == "import":
-        if stmt["package"] in ("ai", "pcAI", "AI"):
-            env["imports"][stmt["nickname"]] = CurlAIModule()
+        nickname = stmt["nickname"]
+        if stmt["package"] == "pcAI":
+            env["imports"][nickname or "pcAI"] = CurlAIModule()
         else:
+            if not nickname:
+                nickname = stmt["package"]
             try:
                 mod = importlib.import_module(stmt["package"])
-                env["imports"][stmt["nickname"]] = mod
+                env["imports"][nickname] = mod
             except ImportError as e:
                 raise ImportError(f"Could not import '{stmt['package']}': {e}")
 
