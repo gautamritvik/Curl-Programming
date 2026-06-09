@@ -2,7 +2,7 @@
 
 Name: Curl
 Purpose: For fun!
-CLI command: curlang [file].curl
+CLI command: curlang [YOUR-FILE].curl
 Install: pip install curl-programming-lang
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
