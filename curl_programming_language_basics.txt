@@ -2,54 +2,166 @@
 
 Name: Curl
 Purpose: For fun!
-Syntax:
+CLI command: curlang [file].curl
+Install: pip install curl-programming-lang
 
-	Say something: pcType{[text surrounded by double quotes]}\
-	Input: pcAsk{[text surrounded by double quotes]>>}\ (the input answer will later be referred as "input{ans}")
-	Storage variable: var{[name of variable, quotes not needed], [variable items, works just like lists]}\ (the variable will later referred as "var{[name of variable]}"
-	List: list{[item1]; [item2]; [item3]}\
-	Function:
-		
-			  createFunc{[name of function, quotes not needed]}-     (the function will later be referred as "func{[name of function]}")
-(4 spaces or 1 tab) ---->     [code]
-			  --\
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-	Loop:
-		1. if{[condition (e.g. var{name} == "Ritvik Gautam")], then}-
-		       [code]
-		   --\
+SYNTAX RULES
+  - Every statement ends with \
+  - Blocks open with - and close with --\
+  - Strings use double quotes: "like this"
+  - Variable names need no quotes
 
-		2. if{[condition (e.g. var{name} == "Ritvik Gautam")], then}-
-		       [code]
-		   else:
-		       [code]
-		   --\
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-		3. if{[condition (e.g. var{name} == "Ritvik Gautam")], then}-
-		       [code]
-		   elif{[condition (e.g. var{name} != "Ritvik Gautam")], then}-
-		       [code]
-		   --\--\
+PRINT
+  pcType{"Hello, world!"}\
+  pcType{"Hello " + var{name}}\
+  pcType{var{x} + var{y}}\
 
-	AI: pcAI{[AI mode surrounded in double quotes (".on" or ".off")], 
-	    [AI's directions surrounded in double quotes], [AI modes (modes are: profanityControl, searchPowers, AImager. Toggles are either (in double quotes) ".on" or ".off")]}\
-	Blocks of code from other supported coding languages: otherCoding{[Coding language name in double quotes (supported: "Python", "JavaScript", "Java", "C", "C++", "Node.js")],
+INPUT
+  pcAsk{"What is your name? >>"}\
+  — the answer is later accessed as: input{ans}
 
-[code]
+VARIABLES
+  var{name, "Ritvik"}\             assign a string
+  var{score, 100}\                 assign a number
+  var{greeting, "Hi " + var{name}}\
+  pcType{var{name}}\               print a variable
 
-}\
+LISTS
+  list{1; 2; 3}\
 
-	Import a package: import{[package name], [package reference nickname]}\
+FUNCTIONS
+  createFunc{greet}-
+      pcType{"Hello!"}\
+  --\
+  func{greet}\                     call the function
 
-Symbols:
-	== is "equals to"
-	= is "set something to"
-	!= is "not equals to"
-	; is "separation of data, like a comma"
-	, is "separation of parameters"
-	\ is "end of code line"
-	- is "start of code loop"
-	-- is "end of code loop"
-	{} is "stuff"
-	"" is "text data"
-	
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+IF / ELIF / ELSE
+
+  1. Basic if:
+     if{var{x} == 10, then}-
+         pcType{"ten"}\
+     --\
+
+  2. If / else:
+     if{var{x} == 10, then}-
+         pcType{"ten"}\
+     else:
+         pcType{"not ten"}\
+     --\
+
+  3. If / elif:
+     if{var{x} > 10, then}-
+         pcType{"big"}\
+     elif{var{x} == 10, then}-
+         pcType{"exact"}\
+     --\--\
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+OPERATORS
+  ==   equals to             !=   not equals to
+  <    less than             >    greater than
+  <=   less than or equal    >=   greater than or equal
+  +    add / concatenate     -    subtract
+  *    multiply              /    divide
+  \    end of line           -    open block
+  --\  close block           {}   argument list
+  ""   string data           ;    list separator
+  ,    parameter separator
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+OTHER LANGUAGE BLOCKS
+  Supported: "Python", "JavaScript", "Node.js"
+  (Java, C, C++ are parsed but not runnable at runtime)
+
+  otherCoding{"Python",
+
+      print("hello from Python")
+
+  }\
+
+  otherCoding{"JavaScript",
+
+      console.log("hello from JS")
+
+  }\
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+IMPORTS
+  import{"ai", ai}\             built-in AI module (see below)
+  import{"math", m}\            any Python stdlib or installed package
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+AI MODULE
+
+  Configure via environment variables:
+    CURL_AI_KEY (or OPENAI_API_KEY)   — your API key
+    CURL_AI_BASE_URL                  — base URL (default: OpenAI)
+                                        use http://localhost:11434/v1 for Ollama
+    CURL_AI_MODEL                     — model name (default: gpt-4o-mini)
+
+  Works with: OpenAI, OpenRouter, Ollama, any OpenAI-compatible API.
+
+  Methods:
+
+    import{"ai", ai}\
+
+    ai.context{"You are a helpful assistant."}\
+      — set a system prompt / bot persona (resets history)
+
+    var{reply, ai.ask{"What is 2 + 2?"}}\
+    pcType{var{reply}}\
+      — ask a question; conversation history is kept across calls
+
+    ai.chat{""}\
+      — start an interactive chat loop in the terminal (type exit to quit)
+
+    ai.reset{""}\
+      — clear conversation history (keeps context)
+
+    var{s, ai.summarize{"some long text here"}}\
+    var{a, ai.analyze{"some data"}}\
+    var{mood, ai.sentiment{"I love this!"}}\   returns: positive / negative / neutral
+    var{t, ai.translate{"Bonjour to English"}}\
+
+  Full example:
+    import{"ai", ai}\
+    ai.context{"You are a friendly tutor."}\
+    var{answer, ai.ask{"Explain variables in one sentence."}}\
+    pcType{var{answer}}\
+
+  Chat example:
+    import{"ai", ai}\
+    ai.chat{""}\
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+REPL (interactive mode)
+  curlang            — start the REPL
+  curlang --help     — show help
+  curlang --license  — show license
+  curlang --credits  — show credits
+
+REPL commands (type inside the REPL):
+  help       — show syntax guide
+  exit       — quit
+  license    — show license
+  credits    — show credits
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SYMBOLS QUICK REFERENCE
+  ==   equals to              !=   not equals to
+  =    set something to       ;    list separator
+  ,    parameter separator    \    end of code line
+  -    open block             --\  close block
+  {}   argument container     ""   string / text data
