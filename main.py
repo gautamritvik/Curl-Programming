@@ -1,8 +1,14 @@
 import sys
 import platform
+from importlib.metadata import version as _pkg_version, PackageNotFoundError
 from lexer import curl_tokenize
 from interpreter import execute
 from parser import Parser
+
+try:
+    __version__ = _pkg_version("curl-programming-lang")
+except PackageNotFoundError:
+    __version__ = "dev"
 
 
 def main():
@@ -26,7 +32,7 @@ def run_file(file_path):
         execute(ast)
     except KeyboardInterrupt:
         print("\nOperation interrupted by user.")
-        print("{You cut off Curl 1.0.0 while it was trying to work! \U0001f61e}")
+        print(f"{{You cut off Curl {__version__} while it was trying to work! \U0001f61e}}")
         sys.exit(1)
     except SyntaxError as e:
         print(f"Syntax Error: {e}")
@@ -41,7 +47,7 @@ def run_file(file_path):
         print(f"Error: {e}")
         sys.exit(1)
 
-    print("\n{You were using Curl 1.0.0 \U0001f609}")
+    print(f"\n{{You were using Curl {__version__} \U0001f609}}")
 
 
 def repl():
@@ -52,7 +58,7 @@ def repl():
     except ImportError:
         pass  # Windows — basic input still works, just no arrow keys
 
-    print(f"Curl 1.0.0 ({platform.system()}) on {sys.platform}")
+    print(f"Curl {__version__} ({platform.system()}) on {sys.platform}")
     print('Type "help" for more information, "exit" to quit.')
 
     env = {
@@ -149,7 +155,7 @@ def _repl_exec(code, env):
 
 def _repl_help():
     print("""
-Curl 1.0.0 — Quick Reference
+Curl — Quick Reference
 ─────────────────────────────
   pcType{"text"}\\              Print to console
   pcAsk{"prompt?">>}\\          Ask for input (access with input{ans})
