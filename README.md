@@ -181,6 +181,30 @@ else:
 
 ---
 
+### Loops — `while` / `for`
+
+**While loop** — repeats while a condition is true:
+
+```
+var{x, 0}\
+while{var{x} < 5}-
+    pcType{var{x}}\
+    var{x, var{x} + 1}\
+--\
+```
+
+**For loop** — iterates a variable from start up to (not including) end:
+
+```
+for{i, 0, 5}-
+    pcType{var{i}}\
+--\
+```
+
+> The loop variable `i` is available inside the block as `var{i}`.
+
+---
+
 ### Embedded code blocks — `otherCoding`
 
 Run a block of code written in another language. The closing `}\` must be on its own line.

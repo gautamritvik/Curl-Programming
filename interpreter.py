@@ -51,6 +51,17 @@ def _exec_stmt(stmt, env):
             if not ran and stmt["else_body"] is not None:
                 execute(stmt["else_body"], _child_env(env))
 
+    elif t == "while":
+        while _eval_condition(stmt["condition"], env):
+            execute(stmt["body"], env)
+
+    elif t == "for":
+        start = int(_eval(stmt["start"], env))
+        end   = int(_eval(stmt["end"], env))
+        for i in range(start, end):
+            env["variables"][stmt["var"]] = i
+            execute(stmt["body"], env)
+
     elif t == "other_code":
         _exec_other(stmt["language"], stmt["code"], env)
 

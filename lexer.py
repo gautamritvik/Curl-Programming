@@ -28,7 +28,8 @@ RAW_CODE = "RAW_CODE"
 
 KEYWORDS = {
     "pcType", "pcAsk", "var", "list", "createFunc", "func",
-    "if", "elif", "else", "then", "pcAI", "otherCoding", "import", "input"
+    "if", "elif", "else", "then", "pcAI", "otherCoding", "import", "input",
+    "while", "for"
 }
 
 TOKEN_PATTERNS = [

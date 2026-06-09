@@ -97,6 +97,8 @@ class Parser:
             "createFunc":   self.parse_func_def,
             "func":         self.parse_func_call,
             "if":           self.parse_if,
+            "while":        self.parse_while,
+            "for":          self.parse_for,
             "otherCoding":  self.parse_other_coding,
             "import":       self.parse_import,
             "pcAI":         self.parse_ai,
@@ -201,6 +203,29 @@ class Parser:
             "elif_clauses": elif_clauses,
             "else_body": else_body,
         }
+
+    def parse_while(self):
+        self.consume(KEYWORD, "while")
+        self.consume(LBRACE)
+        condition = self.parse_condition()
+        self.consume(RBRACE)
+        self.consume(MINUS)
+        body = self.parse_block()
+        return {"type": "while", "condition": condition, "body": body}
+
+    def parse_for(self):
+        # for{i, start, end}-  iterates i from start up to (not including) end
+        self.consume(KEYWORD, "for")
+        self.consume(LBRACE)
+        var_name = self.consume(IDENTIFIER)[1]
+        self.consume(COMMA)
+        start = self.parse_math_expr()
+        self.consume(COMMA)
+        end = self.parse_math_expr()
+        self.consume(RBRACE)
+        self.consume(MINUS)
+        body = self.parse_block()
+        return {"type": "for", "var": var_name, "start": start, "end": end, "body": body}
 
     def parse_other_coding(self):
         self.consume(KEYWORD, "otherCoding")
