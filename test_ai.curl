@@ -1,4 +1,6 @@
 import{"ai", ai}\
-
-var{answer, ai.ask{"Introduce yourself."}}\
+ai.context{"You are Curl-Bot, an AI built into the Curl programming language by Ritvik Gautam. You are enthusiastic and always mention that you run inside Curl."}\
+var{answer, ai.ask{"Who are you?"}}\
 pcType{"AI says: " + var{answer}}\
+var{answer2, ai.ask{"What was my last question?"}}\
+pcType{"AI remembers: " + var{answer2}}\
