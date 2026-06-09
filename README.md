@@ -214,19 +214,17 @@ import{"math", m}\
 
 ---
 
-### AI — `pcAI`
+### AI — `pcAI` + Curl-Bot
 
-`pcAI` is a **built-in AI module** — no import required. It supports conversation history, system prompts, and an interactive chat mode.
+`pcAI` is a **built-in AI module** — no import required. It comes pre-connected to **[Curl-Bot](https://huggingface.co/gautamritvik/Curl-Bot)**, a fine-tuned model that knows everything about Curl syntax and has Curl-Bot's personality baked in.
 
-Configure it with environment variables:
+**Setup — get a free Hugging Face token at [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens), then:**
 
-| Variable | Default | Description |
-|---|---|---|
-| `CURL_AI_KEY` or `OPENAI_API_KEY` | *(none)* | Your API key |
-| `CURL_AI_BASE_URL` | `https://api.openai.com/v1` | API base URL |
-| `CURL_AI_MODEL` | `gpt-4o-mini` | Model name |
+```
+export CURL_AI_KEY=hf_your_token_here
+```
 
-Works with **OpenAI**, **OpenRouter**, **Ollama**, or any OpenAI-compatible API.
+That's all. `pcAI` defaults to Curl-Bot automatically.
 
 **Ask a question:**
 
@@ -235,18 +233,18 @@ var{reply, pcAI.ask{"What is the capital of France?"}}\
 pcType{var{reply}}\
 ```
 
-**Set a persona (system prompt):**
+**Interactive chat loop** (type `exit` to quit):
+
+```
+pcAI.chat{""}\
+```
+
+**Set a custom persona:**
 
 ```
 pcAI.context{"You are a friendly pirate who answers in rhymes."}\
 var{reply, pcAI.ask{"What is 2 + 2?"}}\
 pcType{var{reply}}\
-```
-
-**Interactive chat loop** (type `exit` to quit):
-
-```
-pcAI.chat{""}\
 ```
 
 **Other methods:**
@@ -260,6 +258,16 @@ pcAI.reset{""}\
 ```
 
 > Conversation history is kept across `pcAI.ask` calls and auto-compacts when it gets long.
+
+**Want to use a different model?** Override with env vars:
+
+| Variable | Default | Description |
+|---|---|---|
+| `CURL_AI_KEY` | *(required)* | HF token, OpenAI key, etc. |
+| `CURL_AI_BASE_URL` | `https://api-inference.huggingface.co/v1` | API base URL |
+| `CURL_AI_MODEL` | `gautamritvik/Curl-Bot` | Model name |
+
+Works with **Curl-Bot**, **OpenAI**, **OpenRouter**, **Ollama**, or any OpenAI-compatible API.
 
 ---
 
@@ -313,22 +321,6 @@ pcAI.context{"You are a helpful tutor."}\
 var{answer, pcAI.ask{"Explain what a variable is in one sentence."}}\
 pcType{var{answer}}\
 ```
-
----
-
-## Curl-Bot — Official AI Model
-
-Curl has its own fine-tuned AI model: **[Curl-Bot](https://huggingface.co/gautamritvik/Curl-Bot)** on Hugging Face. It knows everything about Curl syntax and has Curl-Bot's personality baked in.
-
-To use it, get a free token at [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens) and set these environment variables:
-
-```
-export CURL_AI_BASE_URL=https://api-inference.huggingface.co/v1
-export CURL_AI_KEY=hf_your_token_here
-export CURL_AI_MODEL=gautamritvik/Curl-Bot
-```
-
-Then `pcAI.ask`, `pcAI.chat`, and all other AI methods will use Curl-Bot automatically.
 
 ---
 

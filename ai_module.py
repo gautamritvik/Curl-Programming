@@ -172,13 +172,24 @@ class CurlAIModule:
 
     def _raw_request(self, messages):
         api_key  = os.environ.get("CURL_AI_KEY") or os.environ.get("OPENAI_API_KEY", "")
-        base_url = os.environ.get("CURL_AI_BASE_URL", "https://api.openai.com/v1").rstrip("/")
-        model    = os.environ.get("CURL_AI_MODEL", "gpt-4o-mini")
+        base_url = os.environ.get("CURL_AI_BASE_URL", "https://api-inference.huggingface.co/v1").rstrip("/")
+        model    = os.environ.get("CURL_AI_MODEL", "gautamritvik/Curl-Bot")
 
-        if not api_key and "openai.com" in base_url:
+        if not api_key:
             raise RuntimeError(
-                "No API key found. Set CURL_AI_KEY (or OPENAI_API_KEY) in your environment.\n"
-                "For a free local model, install Ollama, run a model, then:\n"
+                "No API key found. Set CURL_AI_KEY in your environment.\n"
+                "\n"
+                "To use Curl-Bot (the official Curl AI model, free):\n"
+                "  1. Get a free token at https://huggingface.co/settings/tokens\n"
+                "  2. export CURL_AI_KEY=hf_your_token_here\n"
+                "\n"
+                "To use OpenAI instead:\n"
+                "  export CURL_AI_KEY=your_openai_key\n"
+                "  export CURL_AI_BASE_URL=https://api.openai.com/v1\n"
+                "  export CURL_AI_MODEL=gpt-4o-mini\n"
+                "\n"
+                "To run fully locally for free (no key needed):\n"
+                "  Install Ollama, then:\n"
                 "  export CURL_AI_BASE_URL=http://localhost:11434/v1\n"
                 "  export CURL_AI_MODEL=llama3.2"
             )
