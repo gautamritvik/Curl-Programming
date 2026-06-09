@@ -136,7 +136,7 @@ def repl():
         pass  # Windows — basic input still works, just no arrow keys
 
     print(f"Curl {__version__} ({platform.system()}) on {sys.platform}")
-    print('Type "help", "copyright", "credits", "license", or "exit" for more information.')
+    print('Type "help", "copyright", "credits" or "license" for more information.')
 
     env = {
         "variables": {},

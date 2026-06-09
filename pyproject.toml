@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "curl-programming-lang"
-version = "1.2.0"
+version = "1.2.1"
 description = "Curl is an open-source programming language built on Python technology"
 readme = "README.md"
 requires-python = ">=3.7"
