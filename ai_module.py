@@ -111,20 +111,18 @@ OTHER LANGUAGE BLOCKS:
       console.log("hi")
   }\\
 
-AI MODULE (import first):
-  import{"ai", ai}\\
-  ai.context{"You are a pirate."}\\   — set bot persona (resets history)
-  var{r, ai.ask{"What is 2+2?"}}\\    — ask a question (history kept)
+AI MODULE (built-in, no import needed):
+  pcAI.context{"You are a pirate."}\\   — set bot persona (resets history)
+  var{r, pcAI.ask{"What is 2+2?"}}\\    — ask a question (history kept)
   pcType{var{r}}\\
-  ai.chat{""}\\                        — start interactive chat loop (type exit to quit)
-  ai.reset{""}\\                       — clear conversation history
-  ai.summarize{"some long text"}\\
-  ai.analyze{"some data"}\\
-  ai.sentiment{"I love this!"}\\       — returns: positive / negative / neutral
-  ai.translate{"Bonjour to English"}\\
+  pcAI.chat{""}\\                        — start interactive chat loop (type exit to quit)
+  pcAI.reset{""}\\                       — clear conversation history
+  pcAI.summarize{"some long text"}\\
+  pcAI.analyze{"some data"}\\
+  pcAI.sentiment{"I love this!"}\\       — returns: positive / negative / neutral
+  pcAI.translate{"Bonjour to English"}\\
 
 IMPORTS:
-  import{"ai", ai}\\                   — built-in AI module
   import{"math", m}\\                  — any Python stdlib or installed package
 
 === END OF CURL REFERENCE ===

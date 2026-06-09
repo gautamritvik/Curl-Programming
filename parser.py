@@ -82,6 +82,10 @@ class Parser:
         if token[0] == IDENTIFIER and self.peek() and self.peek()[0] == DOT:
             return self.parse_method_call_stmt()
 
+        # pcAI.method{arg}\  — built-in AI module, no import needed
+        if token[0] == KEYWORD and token[1] == "pcAI" and self.peek() and self.peek()[0] == DOT:
+            return self.parse_pcai_method_call_stmt()
+
         if token[0] != KEYWORD:
             raise SyntaxError(f"Expected a Curl keyword, got {token[0]} {repr(token[1])}")
 
@@ -217,6 +221,16 @@ class Parser:
         self.consume(LINE_END)
         return {"type": "method_call", "module": module, "method": method, "arg": arg}
 
+    def parse_pcai_method_call_stmt(self):
+        self.consume(KEYWORD, "pcAI")
+        self.consume(DOT)
+        method = self.consume(IDENTIFIER)[1]
+        self.consume(LBRACE)
+        arg = self.parse_concat_expr()
+        self.consume(RBRACE)
+        self.consume(LINE_END)
+        return {"type": "method_call", "module": "pcAI", "method": method, "arg": arg}
+
     def parse_import(self):
         self.consume(KEYWORD, "import")
         self.consume(LBRACE)
@@ -280,6 +294,16 @@ class Parser:
 
         if token[0] == KEYWORD:
             kw = token[1]
+
+            # pcAI.method{arg} as an expression — e.g. var{x, pcAI.ask{"prompt"}}\
+            if kw == "pcAI" and self.peek() and self.peek()[0] == DOT:
+                self.pos += 1  # consume pcAI
+                self.consume(DOT)
+                method = self.consume(IDENTIFIER)[1]
+                self.consume(LBRACE)
+                arg = self.parse_concat_expr()
+                self.consume(RBRACE)
+                return {"type": "method_call", "module": "pcAI", "method": method, "arg": arg}
 
             if kw == "var":
                 self.pos += 1

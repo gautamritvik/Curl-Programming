@@ -28,9 +28,10 @@ git clone https://github.com/gautamritvik/Curl-Programming.git
 cd Curl-Programming
 pip install -e .
 ```
+
 ---
 
-## Running the Curl terminal
+## Running the Curl terminal (REPL)
 
 ```
 curlang
@@ -40,6 +41,15 @@ curlang
 
 ```
 curlang [YOUR-FILE].curl
+```
+
+## CLI flags
+
+```
+curlang --version    show version
+curlang --license    show license
+curlang --credits    show credits
+curlang --help       show help
 ```
 
 ---
@@ -62,7 +72,7 @@ pcType{"Hello, " + var{name} + "!"}\
 Prompts the user for input. The result is accessed anywhere with `input{ans}`.
 
 ```
-pcAsk{"What is your name?">>}\
+pcAsk{"What is your name? >>"}\
 pcType{"You said: " + input{ans}}\
 ```
 
@@ -179,11 +189,50 @@ import{"math", m}\
 
 ### AI — `pcAI`
 
-*(Stub — reserved for future AI integration.)*
+`pcAI` is a **built-in AI module** — no import required. It supports conversation history, system prompts, and an interactive chat mode.
+
+Configure it with environment variables:
+
+| Variable | Default | Description |
+|---|---|---|
+| `CURL_AI_KEY` or `OPENAI_API_KEY` | *(none)* | Your API key |
+| `CURL_AI_BASE_URL` | `https://api.openai.com/v1` | API base URL |
+| `CURL_AI_MODEL` | `gpt-4o-mini` | Model name |
+
+Works with **OpenAI**, **OpenRouter**, **Ollama**, or any OpenAI-compatible API.
+
+**Ask a question:**
 
 ```
-pcAI{".on", "You are a helpful assistant", "profanityControl"}\
+var{reply, pcAI.ask{"What is the capital of France?"}}\
+pcType{var{reply}}\
 ```
+
+**Set a persona (system prompt):**
+
+```
+pcAI.context{"You are a friendly pirate who answers in rhymes."}\
+var{reply, pcAI.ask{"What is 2 + 2?"}}\
+pcType{var{reply}}\
+```
+
+**Interactive chat loop** (type `exit` to quit):
+
+```
+pcAI.chat{""}\
+```
+
+**Other methods:**
+
+```
+var{s, pcAI.summarize{"some long text"}}\
+var{a, pcAI.analyze{"some data"}}\
+var{mood, pcAI.sentiment{"I love this!"}}\
+var{t, pcAI.translate{"Bonjour — translate to English"}}\
+pcAI.reset{""}\
+```
+
+> Conversation history is kept across `pcAI.ask` calls and auto-compacts when it gets long.
 
 ---
 
@@ -202,6 +251,9 @@ pcAI{".on", "You are a helpful assistant", "profanityControl"}\
 | `!=` | Not equals |
 | `=` | Assignment |
 | `+` | Concatenation / addition |
+| `-` | Subtraction |
+| `*` | Multiplication |
+| `/` | Division |
 
 ---
 
@@ -223,6 +275,16 @@ createFunc{sayBye}-
 --\
 
 func{sayBye}\
+```
+
+---
+
+## Example AI program
+
+```
+pcAI.context{"You are a helpful tutor."}\
+var{answer, pcAI.ask{"Explain what a variable is in one sentence."}}\
+pcType{var{answer}}\
 ```
 
 ---

@@ -7,7 +7,7 @@ def execute(ast, env=None):
         env = {
             "variables": {},
             "functions": {},
-            "imports": {},
+            "imports": {"pcAI": CurlAIModule()},  # built-in, no import needed
             "last_input": None,
         }
     for stmt in ast:
