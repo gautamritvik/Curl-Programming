@@ -240,12 +240,12 @@ import{"math", m}\
 
 ### AI — `pcAI` + Curl-Bot
 
-`pcAI` is a **built-in AI module** — no import required. It comes pre-connected to **[Curl-Bot](https://huggingface.co/gautamritvik/Curl-Bot)**, a free fine-tuned model that knows everything about Curl syntax and has Curl-Bot's personality baked in.
+`pcAI` is a **built-in AI module** — no import required. It defaults to **DeepSeek** via OpenRouter (free).
 
-**Setup — get your free Hugging Face token at [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens), then:**
+**Setup — get a free key at [openrouter.ai/keys](https://openrouter.ai/keys), then:**
 
 ```
-export CURL_AI_KEY=hf_your_token_here
+export CURL_AI_KEY=sk-or-your_key_here
 ```
 
 That's all. `pcAI` defaults to Curl-Bot automatically.
@@ -287,11 +287,11 @@ pcAI.reset{""}\
 
 | Variable | Default | Description |
 |---|---|---|
-| `CURL_AI_KEY` | *(required)* | HF token, OpenAI key, etc. |
-| `CURL_AI_BASE_URL` | `https://api-inference.huggingface.co/v1` | API base URL |
-| `CURL_AI_MODEL` | `gautamritvik/Curl-Bot` | Model name |
+| `CURL_AI_KEY` | *(required)* | OpenRouter key, OpenAI key, etc. |
+| `CURL_AI_BASE_URL` | `https://openrouter.ai/api/v1` | API base URL |
+| `CURL_AI_MODEL` | `deepseek/deepseek-chat-v3-0324` | Model name |
 
-Works with **Curl-Bot**, **OpenAI**, **OpenRouter**, **Ollama**, or any OpenAI-compatible API.
+Works with **OpenRouter** (recommended, free models available), **OpenAI**, **Ollama**, or any OpenAI-compatible API.
 
 ---
 
