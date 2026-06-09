@@ -3,6 +3,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/curl-programming-lang.svg)](https://pypi.org/project/curl-programming-lang/)
 [![License](https://img.shields.io/github/license/gautamritvik/Curl-Programming.svg)](https://github.com/gautamritvik/Curl-Programming/blob/main/LICENSE)
 [![Python](https://img.shields.io/pypi/pyversions/curl-programming-lang.svg)](https://pypi.org/project/curl-programming-lang/)
+[![Curl-Bot](https://img.shields.io/badge/AI%20Model-Curl--Bot-blue)](https://huggingface.co/gautamritvik/Curl-Bot)
 
 Curl is an open-source programming language built on Python technology, designed to be simple and expressive. Every statement uses a `keyword{...}\` style, and blocks are opened with `-` and closed with `--\`.
 
@@ -312,6 +313,22 @@ pcAI.context{"You are a helpful tutor."}\
 var{answer, pcAI.ask{"Explain what a variable is in one sentence."}}\
 pcType{var{answer}}\
 ```
+
+---
+
+## Curl-Bot — Official AI Model
+
+Curl has its own fine-tuned AI model: **[Curl-Bot](https://huggingface.co/gautamritvik/Curl-Bot)** on Hugging Face. It knows everything about Curl syntax and has Curl-Bot's personality baked in.
+
+To use it, get a free token at [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens) and set these environment variables:
+
+```
+export CURL_AI_BASE_URL=https://api-inference.huggingface.co/v1
+export CURL_AI_KEY=hf_your_token_here
+export CURL_AI_MODEL=gautamritvik/Curl-Bot
+```
+
+Then `pcAI.ask`, `pcAI.chat`, and all other AI methods will use Curl-Bot automatically.
 
 ---
 
