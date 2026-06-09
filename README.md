@@ -28,6 +28,13 @@ git clone https://github.com/gautamritvik/Curl-Programming.git
 cd Curl-Programming
 pip install -e .
 ```
+---
+
+## Running the Curl terminal
+
+```
+curlang
+```
 
 ## Running a Curl program
 
