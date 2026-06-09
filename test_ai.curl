@@ -1,3 +1,3 @@
 import{"ai", ai}\
-var{answer, ai.ask{"What is 2 + 2? Reply with just the number."}}\
+var{answer, ai.ask{"Introduce yourself."}}\
 pcType{"AI says: " + var{answer}}\
