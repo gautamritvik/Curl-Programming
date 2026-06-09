@@ -216,9 +216,9 @@ import{"math", m}\
 
 ### AI — `pcAI` + Curl-Bot
 
-`pcAI` is a **built-in AI module** — no import required. It comes pre-connected to **[Curl-Bot](https://huggingface.co/gautamritvik/Curl-Bot)**, a fine-tuned model that knows everything about Curl syntax and has Curl-Bot's personality baked in.
+`pcAI` is a **built-in AI module** — no import required. It comes pre-connected to **[Curl-Bot](https://huggingface.co/gautamritvik/Curl-Bot)**, a free fine-tuned model that knows everything about Curl syntax and has Curl-Bot's personality baked in.
 
-**Setup — get a free Hugging Face token at [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens), then:**
+**Setup — get your free Hugging Face token at [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens), then:**
 
 ```
 export CURL_AI_KEY=hf_your_token_here
