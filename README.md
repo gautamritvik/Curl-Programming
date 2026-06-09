@@ -9,11 +9,25 @@ Curl is an open-source programming language built on Python technology, designed
 
 ## Installation
 
+**From PyPI (recommended):**
+
 ```
-pip install -e .
+pip install curl-programming-lang
 ```
 
-This registers the `curlang` command globally.
+**To upgrade:**
+
+```
+pip install --upgrade curl-programming-lang
+```
+
+**From source:**
+
+```
+git clone https://github.com/gautamritvik/Curl-Programming.git
+cd Curl-Programming
+pip install -e .
+```
 
 ## Running a Curl program
 
