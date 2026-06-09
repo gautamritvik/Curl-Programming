@@ -4,9 +4,26 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "curl-programming-lang"
-version = "1.0.0"
-description = "Curl programming language interpreter"
+version = "1.0.1"
+description = "Curl is an open-source programming language built on Python technology"
+readme = "README.md"
 requires-python = ">=3.7"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "Ritvik Gautam", email = "" }
+]
+keywords = ["programming-language", "interpreter", "curl", "curlang"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Interpreters",
+]
+
+[project.urls]
+Homepage = "https://github.com/gautamritvik/Curl-Programming"
+Repository = "https://github.com/gautamritvik/Curl-Programming"
+"Bug Tracker" = "https://github.com/gautamritvik/Curl-Programming/issues"
 
 [project.scripts]
 curlang = "main:main"
