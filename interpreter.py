@@ -150,7 +150,7 @@ def _eval(expr, env):
         method_name = expr["method"]
         arg = _eval(expr["arg"], env)
         if module_name not in env["imports"]:
-            raise NameError(f"'{module_name}' is not imported — use import{{\"ai\", {module_name}}}\\")
+            raise NameError(f"'{module_name}' is not imported — use import{{\"{module_name}\"}}\\ or import{{\"{module_name}\", nickname}}\\")
         module = env["imports"][module_name]
         if not hasattr(module, method_name):
             raise AttributeError(f"'{module_name}' has no method '{method_name}'")

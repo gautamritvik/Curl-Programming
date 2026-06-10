@@ -5,6 +5,7 @@ from importlib.metadata import version as _pkg_version, PackageNotFoundError
 from lexer import curl_tokenize
 from interpreter import execute
 from parser import Parser
+from ai_module import CurlAIModule
 
 try:
     __version__ = _pkg_version("curl-programming-lang")
@@ -141,7 +142,7 @@ def repl():
     env = {
         "variables": {},
         "functions": {},
-        "imports": {},
+        "imports": {"pcAI": CurlAIModule()},
         "last_input": None,
     }
 
