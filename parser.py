@@ -121,7 +121,8 @@ class Parser:
         self.consume(KEYWORD, "pcAsk")
         self.consume(LBRACE)
         prompt = self.consume(STRING)[1].strip('"')
-        self.consume(ARROW)
+        if self.check(ARROW):
+            self.consume(ARROW)
         self.consume(RBRACE)
         self.consume(LINE_END)
         return {"type": "input", "prompt": prompt}
