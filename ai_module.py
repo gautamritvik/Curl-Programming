@@ -37,6 +37,8 @@ def _md(text):
             line = re.sub(r'\*(.+?)\*', lambda m: f"{_I}{m.group(1)}{_R}", line)
             # inline code
             line = re.sub(r'`([^`]+)`', lambda m: f"{_CY}{m.group(1)}{_R}", line)
+            # markdown links [text](url) → text <url>
+            line = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', lambda m: f"{m.group(1)} {_CY}<{m.group(2)}>{_R}", line)
         out.append(line)
     return "\n".join(out)
 
@@ -46,7 +48,7 @@ _DEFAULT_SYSTEM = """\
 You are Curl-Bot, an AI assistant built into the Curl programming language.
 Curl is an open-source programming language created by Ritvik Gautam that runs on Python.
 You are helpful, concise, and friendly.
-Respond in plain text only — no Markdown, no asterisks, no bullet symbols, no backticks.
+You may use Markdown in your responses — headings, bold, italic, bullet points, inline code, and links are all supported and will be rendered in the terminal.
 
 === CURL LANGUAGE REFERENCE ===
 

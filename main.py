@@ -14,6 +14,23 @@ except PackageNotFoundError:
 
 _COPYRIGHT = f"Copyright (c) 2024-2026 Ritvik Gautam. All rights reserved."
 
+def _banner():
+    B = "\033[1m"
+    C = "\033[36m"
+    R = "\033[0m"
+    lines = [
+        " ████  █   █  ████   █    ",
+        "█      █   █  █   █  █    ",
+        "█      █   █  ████   █    ",
+        "█      █   █  █ █    █    ",
+        " ████   ███   █  █   █████",
+    ]
+    print(f"{B}{C}")
+    for line in lines:
+        print(" " + line)
+    print(f"{R}{B}  Programming Language  ·  v{__version__}{R}")
+    print()
+
 _LICENSE = """\
 Curl is distributed under the Apache License, Version 2.0.
 
@@ -106,13 +123,13 @@ def run_file(file_path):
         print(f"Error: File not found — '{file_path}'")
         sys.exit(1)
 
+    _banner()
     try:
         tokens = curl_tokenize(code)
         ast = Parser(tokens).parse()
         execute(ast)
     except KeyboardInterrupt:
         print("\nOperation interrupted by user.")
-        print(f"{{You cut off Curl {__version__} while it was trying to work! \U0001f61e}}")
         sys.exit(1)
     except SyntaxError as e:
         print(f"Syntax Error: {e}")
@@ -127,8 +144,6 @@ def run_file(file_path):
         print(f"Error: {e}")
         sys.exit(1)
 
-    print(f"\n{{You were using Curl {__version__} \U0001f609}}")
-
 
 def repl():
     try:
@@ -136,8 +151,8 @@ def repl():
     except ImportError:
         pass  # Windows — basic input still works, just no arrow keys
 
-    print(f"Curl {__version__} ({platform.system()}) on {sys.platform}")
-    print('Type "help", "copyright", "credits" or "license" for more information.')
+    _banner()
+    print(f'({platform.system()})  Type "help", "exit", or "license" for more information.')
 
     env = {
         "variables": {},
