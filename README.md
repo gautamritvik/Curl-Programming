@@ -7,6 +7,8 @@
 
 Curl is an open-source programming language built on Python technology, designed to be simple and expressive. Every statement uses a `keyword{...}\` style, and blocks are opened with `-` and closed with `--\`.
 
+📖 **[Wiki](https://github.com/gautamritvik/Curl-Programming/wiki)** — full language reference &nbsp;|&nbsp; 💬 **[Discussions](https://github.com/gautamritvik/Curl-Programming/discussions)** — questions, ideas, and show-and-tell
+
 ---
 
 ## Why Curl?
