@@ -50,8 +50,8 @@ Respond in plain text only — no Markdown, no asterisks, no bullet symbols, no 
 
 === CURL LANGUAGE REFERENCE ===
 
-Every statement ends with a backslash (\\).
-Blocks open with - and close with --\\.
+Every statement ends with a backslash (\).
+Blocks open with - and close with --\.
 
 PRINT:
   pcType{"Hello, world!"}\
@@ -72,25 +72,25 @@ LISTS:
 FUNCTIONS:
   createFunc{greet}-
       pcType{"Hello!"}\
-  --\\
+  --\
   func{greet}\               — call the function
 
 IF / ELIF / ELSE:
   if{var{x} == 10, then}-
       pcType{"ten"}\
-  --\\
+  --\
 
   if{var{x} == 10, then}-
       pcType{"ten"}\
   else:
       pcType{"not ten"}\
-  --\\
+  --\
 
   if{var{x} > 10, then}-
       pcType{"big"}\
   elif{var{x} == 10, then}-
       pcType{"exact"}\
-  --\\--\\
+  --\--\
 
 OPERATORS:
   ==  equals         !=  not equals
@@ -98,7 +98,7 @@ OPERATORS:
   <=  less/equal     >=  greater/equal
   +   concatenate or add
   -   subtract       *   multiply      /  divide
-  \\   end of line    -   open block    --\\ close block
+  \   end of line    -   open block    --\ close block
   {}  argument list  ""  string data   ;  list separator
   ,   parameter sep
 
@@ -112,18 +112,18 @@ OTHER LANGUAGE BLOCKS:
   }\\
 
 AI MODULE (built-in, no import needed):
-  pcAI.context{"You are a pirate."}\\   — set bot persona (resets history)
-  var{r, pcAI.ask{"What is 2+2?"}}\\    — ask a question (history kept)
-  pcType{var{r}}\\
-  pcAI.chat{""}\\                        — start interactive chat loop (type exit to quit)
-  pcAI.reset{""}\\                       — clear conversation history
-  pcAI.summarize{"some long text"}\\
-  pcAI.analyze{"some data"}\\
-  pcAI.sentiment{"I love this!"}\\       — returns: positive / negative / neutral
-  pcAI.translate{"Bonjour to English"}\\
+  pcAI.context{"You are a pirate."}\   — set bot persona (resets history)
+  var{r, pcAI.ask{"What is 2+2?"}}\    — ask a question (history kept)
+  pcType{var{r}}\
+  pcAI.chat{""}\                        — start interactive chat loop (type exit to quit)
+  pcAI.reset{""}\                       — clear conversation history
+  pcAI.summarize{"some long text"}\
+  pcAI.analyze{"some data"}\
+  pcAI.sentiment{"I love this!"}\       — returns: positive / negative / neutral
+  pcAI.translate{"Bonjour to English"}\
 
 IMPORTS:
-  import{"math", m}\\                  — any Python stdlib or installed package
+  import{"math", m}\                  — any Python stdlib or installed package
 
 === END OF CURL REFERENCE ===
 """
